@@ -71,19 +71,24 @@ function authApi(app) {
         })(req, res, next);
     });
 
+    //creacion del usuario le pasamos el esquema para crear el usuario asi el validationHandler valida que la informacion que mandemos es correcta luego recibe un callback
     router.post('/sign-up', validationHandler(createUserSchema), async function(
         req,
         res,
         next
     ) {
+        //sacamos del body el user
         const { body: user } = req;
 
+        //vamos a manejar errores
         try {
+            //llamamos nuestro servicio de agarrar el password hacer un hash e incertarlo a la base de datos
             const createdUserId = await usersService.createUser({ user });
 
+            //si todo va bien respondemos con un 201 de creacion existosa
             res.status(201).json({
-                data: createdUserId,
-                message: 'user created'
+                data: createdUserId, //devolvemos la data
+                message: 'user created' //le damos un mensaje de exito
             });
         } catch (error) {
             next(error);

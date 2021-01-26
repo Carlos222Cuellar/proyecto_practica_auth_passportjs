@@ -152,7 +152,8 @@ function moviesApi(app) {
 
     router.get(
         '/',
-        passport.authenticate('jwt', { session: false }),
+        //solo se podra acceder a nuestras rutas si tenemos un jwt valido
+        passport.authenticate('jwt', { session: false }), //definiendo nuestra estrategia con passport solo le decimos que use a jwt y la sesion sea false para que no inicie sesion
         scopesValidationHandler(['read:movies']),
         async function(req, res, next) {
             cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
