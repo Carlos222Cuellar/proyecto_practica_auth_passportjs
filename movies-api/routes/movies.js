@@ -133,7 +133,7 @@ const {
 } = require('../utils/schemas/movies');
 
 const validationHandler = require('../utils/middleware/validationHandler');
-const scopesValidationHandler = require('../utils/middleware/scopesValidationHandler');
+const scopesValidationHandler = require('../utils/middleware/scopesValidationHandler'); //manejador de los scopes para nuestra aplicacion
 
 const cacheResponse = require('../utils/cacheResponse');
 const {
@@ -154,7 +154,7 @@ function moviesApi(app) {
         '/',
         //solo se podra acceder a nuestras rutas si tenemos un jwt valido
         passport.authenticate('jwt', { session: false }), //definiendo nuestra estrategia con passport solo le decimos que use a jwt y la sesion sea false para que no inicie sesion
-        scopesValidationHandler(['read:movies']),
+        scopesValidationHandler(['read:movies']), //como ya validamos si tiene scopes el usuario verificamos en la ruta del get si el usuario puede leer las peliculas que tenemos guardadas de ser asi lo permite si no no le deja por falta de permisos
         async function(req, res, next) {
             cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
             const { tags } = req.query;
@@ -197,7 +197,7 @@ function moviesApi(app) {
     router.post(
         '/',
         passport.authenticate('jwt', { session: false }),
-        scopesValidationHandler(['create:movies']),
+        scopesValidationHandler(['create:movies']), //scopes para crear movies
         validationHandler(createMovieSchema),
         async function(req, res, next) {
             const { body: movie } = req;
@@ -217,7 +217,7 @@ function moviesApi(app) {
     router.put(
         '/:movieId',
         passport.authenticate('jwt', { session: false }),
-        scopesValidationHandler(['update:movies']),
+        scopesValidationHandler(['update:movies']), //Scopes para actualizar las movies
         validationHandler({ movieId: movieIdSchema }, 'params'),
         validationHandler(updateMovieSchema),
         async function(req, res, next) {
@@ -243,7 +243,7 @@ function moviesApi(app) {
     router.delete(
         '/:movieId',
         passport.authenticate('jwt', { session: false }),
-        scopesValidationHandler(['deleted:movies']),
+        scopesValidationHandler(['deleted:movies']), //scopes para eliminar movies
         validationHandler({ movieId: movieIdSchema }, 'params'),
         async function(req, res, next) {
             const { movieId } = req.params;

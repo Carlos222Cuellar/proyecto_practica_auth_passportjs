@@ -94,7 +94,7 @@ const passport = require('passport');
 
 const UserMoviesService = require('../services/userMovies');
 const validationHandler = require('../utils/middleware/validationHandler');
-const scopesValidationHandler = require('../utils/middleware/scopesValidationHandler');
+const scopesValidationHandler = require('../utils/middleware/scopesValidationHandler'); //manejador de scopes en las rutas
 
 const { movieIdSchema } = require('../utils/schemas/movies');
 const { userIdSchema } = require('../utils/schemas/users');
@@ -112,7 +112,7 @@ function userMoviesApi(app) {
     router.get(
         '/',
         passport.authenticate('jwt', { session: false }),
-        scopesValidationHandler(['read:user-movies']),
+        scopesValidationHandler(['read:user-movies']), //scope que tengo que tener para poder obtener las peliculas si no lo tengo el manejador de scopes nos dara el error si si existe me deja leer sin problemas
         validationHandler({ userId: userIdSchema }, 'query'),
         async function(req, res, next) {
             const { userId } = req.query;
