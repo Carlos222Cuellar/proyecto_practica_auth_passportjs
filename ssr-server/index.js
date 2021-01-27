@@ -119,13 +119,16 @@ app.delete("/user-movies/:userMovieId", async function(req, res, next) {
     }
 });
 
+//endopoints de google
+//este va ser el endpoint de la autentificacion de google
 app.get(
     "/auth/google-oauth",
     passport.authenticate("google-oauth", {
-        scope: ["email", "profile", "openid"]
+        scope: ["email", "profile", "openid"] //le pasamos el scope
     })
 );
 
+//hacemos el callback
 app.get(
     "/auth/google-oauth/callback",
     passport.authenticate("google-oauth", { session: false }),
